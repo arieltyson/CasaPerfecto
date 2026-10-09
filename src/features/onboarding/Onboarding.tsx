@@ -44,6 +44,13 @@ function CityStep() {
   );
 }
 
+// Stable across renders: React calls a ref callback again whenever its
+// identity changes, and an inline one would pull focus out of the inputs on
+// every keystroke.
+function focusOnMount(el: HTMLHeadingElement | null) {
+  el?.focus();
+}
+
 export function Onboarding() {
   const { state, dispatch } = useAppState();
   const { t } = useT();
@@ -56,9 +63,9 @@ export function Onboarding() {
         <p className="steps">
           {t("onboarding.step", { n: step + 1, total: STEPS.length })}
         </p>
-        {/* Each step remounts its heading and moves focus to it, so screen
-            readers announce the new step. */}
-        <h1 key={step} ref={(el) => el?.focus()} tabIndex={-1}>
+        {/* Each step remounts its heading (key) and moves focus to it once,
+            so screen readers announce the new step. */}
+        <h1 key={step} ref={focusOnMount} tabIndex={-1}>
           {t(STEPS[step]!)}
         </h1>
       </div>

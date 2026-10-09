@@ -77,6 +77,21 @@ export function StateProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timer);
   }, [state, lock, locked]);
 
+  // A share link pasted into a tab that already has the site open changes
+  // only the fragment, which does not reload the page.
+  useEffect(() => {
+    const onHash = () => {
+      const current = latest.current;
+      if (current.locked) return; // applied after unlock instead
+      const shared = decodeShare(location.hash, current.state);
+      if (!shared) return;
+      clearHash();
+      dispatch({ type: "replace", state: shared });
+    };
+    addEventListener("hashchange", onHash);
+    return () => removeEventListener("hashchange", onHash);
+  }, []);
+
   useEffect(() => {
     const flush = () => {
       const current = latest.current;

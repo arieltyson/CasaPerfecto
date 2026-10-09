@@ -53,3 +53,44 @@ test("reports a missing data file instead of failing silently", async ({
   await page.getByRole("button", { name: "Start" }).click();
   await expect(page.getByText("The area data could not load.")).toBeVisible();
 });
+
+test("typing a salary keeps focus in the field", async ({ page }) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: "Start" }).click();
+  for (let i = 0; i < 3; i++) {
+    await page.getByRole("button", { name: "Next" }).click();
+  }
+  const salary = page.getByLabel("Your gross yearly salary");
+  await salary.click();
+  await page.keyboard.type("135000");
+  await expect(salary).toHaveValue("135000");
+  await expect(salary).toBeFocused();
+});
+
+test("a share link pasted into an open tab adds its listings", async ({
+  page,
+}) => {
+  await onboard(page, { salary: "120000" });
+  const listings = [
+    {
+      id: "x",
+      address: "Pasted listing",
+      baseRent: 3000,
+      location: { lon: -122.4103, lat: 37.8008 },
+    },
+  ];
+  const payload = Buffer.from(JSON.stringify({ listings }))
+    .toString("base64")
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
+    .replace(/=+$/, "");
+  await page.goto(`./#s=${payload}`);
+  await expandSheet(page);
+  await openTab(page, "Listings");
+  await expect(page.getByText("Pasted listing")).toBeVisible();
+  await openTab(page, "Budget");
+  await expect(page.getByLabel("Your gross yearly salary")).toHaveValue(
+    "120000",
+  );
+  expect(page.url()).not.toContain("#s=");
+});
