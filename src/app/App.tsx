@@ -9,6 +9,7 @@ import { MapArea } from "../features/map/MapArea.tsx";
 import { Rail } from "../features/map/Rail.tsx";
 import { Methods } from "../features/methods/Methods.tsx";
 import { Onboarding } from "../features/onboarding/Onboarding.tsx";
+import { PreferencesPanel } from "../features/preferences/PreferencesPanel.tsx";
 import { Welcome } from "../features/onboarding/Welcome.tsx";
 import { Unlock } from "../features/settings/Unlock.tsx";
 import { I18nProvider, useT } from "../i18n/i18n.tsx";
@@ -67,6 +68,11 @@ function Shell() {
         render: () => <CommutePanel />,
       },
       { id: "budget", label: t("tabs.budget"), render: () => <BudgetPanel /> },
+      {
+        id: "preferences",
+        label: t("tabs.preferences"),
+        render: () => <PreferencesPanel />,
+      },
       { id: "areas", label: t("tabs.areas"), render: () => <AreaList /> },
     ],
     [t],
