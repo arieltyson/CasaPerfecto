@@ -43,7 +43,10 @@ export function Dock({ tabs }: { tabs: TabDef[] }) {
           aria-expanded={expanded}
           onClick={() => setExpanded((e) => !e)}
         >
-          {expanded ? t("dock.collapse") : t("dock.expand")}
+          <span aria-hidden="true">{expanded ? "▾" : "▴"}</span>
+          <span className="visually-hidden">
+            {expanded ? t("dock.collapse") : t("dock.expand")}
+          </span>
         </Button>
       </div>
       <div role="tablist" aria-label={t("tabs.label")} className="tabs">

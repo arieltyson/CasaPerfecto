@@ -438,6 +438,14 @@ textarea.textarea {
     display: inline-flex;
   }
 
+  .dock__head {
+    padding: var(--space-2) var(--space-4) 0;
+  }
+
+  .dock__brand span {
+    display: none;
+  }
+
   .rail {
     top: var(--space-2);
     right: var(--space-2);
