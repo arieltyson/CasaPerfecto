@@ -27,7 +27,8 @@
       {
         "allow": ["**/*.css", "@fontsource-variable/*"]
       }
-    ]
+    ],
+    "unicorn/require-post-message-target-origin": "off"
   },
   "ignorePatterns": ["dist", "playwright-report", "test-results"],
   "overrides": [

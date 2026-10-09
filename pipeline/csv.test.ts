@@ -1,5 +1,5 @@
 import { gtfsSeconds, parseCsv } from "./csv.ts";
-import { percentRanks } from "./safety.ts";
+import { quartileBands } from "./safety.ts";
 
 describe("parseCsv", () => {
   it("handles quotes, escaped quotes and CRLF", () => {
@@ -18,8 +18,14 @@ describe("gtfsSeconds", () => {
   });
 });
 
-describe("percentRanks", () => {
-  it("ranks each value by the share of values below it", () => {
-    expect(percentRanks([0, 0, 5, 10])).toEqual([0, 0, 50, 75]);
+describe("quartileBands", () => {
+  it("keeps zero apart and splits the rest into quartiles", () => {
+    const { bands, limits } = quartileBands([0, 0, 1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(limits).toEqual([3, 5, 7]);
+    expect(bands).toEqual([0, 0, 1, 1, 1, 2, 2, 3, 3, 4]);
+  });
+
+  it("handles an area with no reports", () => {
+    expect(quartileBands([0, 0]).bands).toEqual([0, 0]);
   });
 });

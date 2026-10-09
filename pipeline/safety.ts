@@ -70,28 +70,34 @@ async function query(
   return JSON.parse(new TextDecoder().decode(bytes)) as Row[];
 }
 
-/** Share of values strictly below each value, as a whole percent. */
-export function percentRanks(values: number[]): number[] {
-  const sorted = values.toSorted((a, b) => a - b);
-  return values.map((v) => {
-    let lo = 0;
-    let hi = sorted.length;
-    while (lo < hi) {
-      const mid = (lo + hi) >> 1;
-      if (sorted[mid]! < v) lo = mid + 1;
-      else hi = mid;
-    }
-    return Math.round((lo / sorted.length) * 100);
-  });
+export interface Banding {
+  /** Band per cell: 0 when none were reported, then 1 to 4 by quartile of
+   * the cells that had at least one report. */
+  bands: number[];
+  /** Upper count of bands 1, 2 and 3; band 4 is everything above. */
+  limits: [number, number, number];
+}
+
+/** Bands counts as "none reported" plus quartiles of the nonzero cells, so
+ * the many cells with no reports do not crowd the scale. */
+export function quartileBands(values: number[]): Banding {
+  const nonzero = values.filter((v) => v > 0).toSorted((a, b) => a - b);
+  const at = (q: number) =>
+    nonzero[Math.min(nonzero.length - 1, Math.floor(nonzero.length * q))] ?? 0;
+  const limits: [number, number, number] = [at(0.25), at(0.5), at(0.75)];
+  const bands = values.map((v) =>
+    v === 0 ? 0 : 1 + limits.filter((limit) => v > limit).length,
+  );
+  return { bands, limits };
 }
 
 export interface Safety {
   violent: number[];
   property: number[];
   encampment: number[];
-  violentPct: number[];
-  propertyPct: number[];
-  encampmentPct: number[];
+  violentBand: Banding;
+  propertyBand: Banding;
+  encampmentBand: Banding;
   danger: number[];
   hood: number[];
   hoods: string[];
@@ -193,7 +199,6 @@ export async function buildSafety(
   });
   fillHoods(cells, hood);
 
-  const violentPct = percentRanks(violent);
   const threshold = violent.toSorted((a, b) => a - b)[Math.floor(n * 0.9)]!;
   const danger = violent.map((v) => (v > 0 && v >= threshold ? 1 : 0));
   log(
@@ -205,9 +210,9 @@ export async function buildSafety(
     violent,
     property,
     encampment,
-    violentPct,
-    propertyPct: percentRanks(property),
-    encampmentPct: percentRanks(encampment),
+    violentBand: quartileBands(violent),
+    propertyBand: quartileBands(property),
+    encampmentBand: quartileBands(encampment),
     danger,
     hood,
     hoods,
