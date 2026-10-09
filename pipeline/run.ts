@@ -4,6 +4,7 @@ import { gzipSync } from "node:zlib";
 import { join } from "node:path";
 import { encodeGraph } from "../src/lib/graph.ts";
 import { DATA_OUT, isoDate, log, writeBytes, writeJson } from "./lib.ts";
+import { buildBasemap } from "./basemap.ts";
 import { loadOsm } from "./osm.ts";
 import { loadTerrain } from "./terrain.ts";
 import {
@@ -33,3 +34,5 @@ writeJson(join(DATA_OUT, "area.json"), {
   cells: { index: cells.index, node: cells.node, snap: cells.snap },
   outline: outline(cells),
 });
+
+await buildBasemap(refresh);
