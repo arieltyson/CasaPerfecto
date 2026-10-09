@@ -6,6 +6,7 @@ import "./design/global.css";
 import "./design/components.css";
 import "./app/layout.css";
 import { App } from "./app/App.tsx";
+import { registerServiceWorker } from "./pwa.ts";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Missing #root element.");
@@ -15,3 +16,5 @@ createRoot(root).render(
     <App />
   </StrictMode>,
 );
+
+registerServiceWorker();

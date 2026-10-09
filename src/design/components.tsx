@@ -272,7 +272,7 @@ export function Mark({ size = 40 }: { size?: number }) {
       focusable="false"
     >
       <circle className="mark__ring" cx="32" cy="32" r="30" />
-      <path className="mark__door" d="M24 62 V40 a8 8 0 0 1 16 0 V62 Z" />
+      <path className="mark__door" d="M24 62V40a8 8 0 0 1 16 0v22z" />
     </svg>
   );
 }
