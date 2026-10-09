@@ -181,7 +181,7 @@ function largestComponent(nodeCount: number, edges: Edge[]): Set<number> {
     const root = find(i);
     sizes.set(root, (sizes.get(root) ?? 0) + 1);
   }
-  const [biggest] = [...sizes].sort((a, b) => b[1] - a[1])[0]!;
+  const [biggest] = [...sizes].toSorted((a, b) => b[1] - a[1])[0]!;
   const members = new Set<number>();
   for (let i = 0; i < nodeCount; i++) if (find(i) === biggest) members.add(i);
   return members;
@@ -275,6 +275,11 @@ export function buildCells(network: Network, nodes: NodeIndex): Cells {
   return cells;
 }
 
+const round = (p: [number, number]): [number, number] => [
+  Number(p[0].toFixed(6)),
+  Number(p[1].toFixed(6)),
+];
+
 /** Grid-edge segments between area cells and the outside, for the outline. */
 export function outline(cells: Cells): [number, number][][] {
   const { grid } = cells;
@@ -287,10 +292,6 @@ export function outline(cells: Cells): [number, number][][] {
     const s = grid.south + row * grid.dLat;
     const e = w + grid.dLon;
     const n = s + grid.dLat;
-    const round = (p: [number, number]): [number, number] => [
-      Number(p[0].toFixed(6)),
-      Number(p[1].toFixed(6)),
-    ];
     if (row === 0 || !inside.has(i - grid.cols)) {
       segments.push([round([w, s]), round([e, s])]);
     }
@@ -327,7 +328,7 @@ export function intersections(network: Network, cells: Cells): Place[] {
   for (let i = 0; i < network.lon.length; i++) {
     const streets = network.names[i]!;
     if (streets.length < 2) continue;
-    const name = [...streets].sort().slice(0, 2).join(" & ");
+    const name = streets.toSorted().slice(0, 2).join(" & ");
     if (seen.has(name)) continue;
     const lon = network.lon[i]!;
     const lat = network.lat[i]!;
@@ -343,7 +344,6 @@ export function intersections(network: Network, cells: Cells): Place[] {
       cell,
     });
   }
-  places.sort((a, b) => a.name.localeCompare(b.name));
   log("walk", `${places.length} named intersections`);
-  return places;
+  return places.toSorted((a, b) => a.name.localeCompare(b.name));
 }

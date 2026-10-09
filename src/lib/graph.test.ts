@@ -30,7 +30,9 @@ describe("walking graph", () => {
   });
 
   it("rejects files that are not graphs", () => {
-    expect(() => decodeGraph(new ArrayBuffer(16))).toThrow();
+    expect(() => decodeGraph(new ArrayBuffer(16))).toThrow(
+      "Not a CasaPerfecto graph file.",
+    );
   });
 
   it("measures the walk toward the seed, not away from it", () => {
@@ -59,6 +61,9 @@ describe("walking graph", () => {
     expect(capped[0]).toBe(20);
   });
 });
+
+const rounded = (values: ArrayLike<number>) =>
+  Array.from(values, (v) => (v === Infinity ? v : Math.round(v * 100)));
 
 describe("timeToSeeds on a random graph", () => {
   it("matches Bellman-Ford shortest paths", () => {
@@ -90,9 +95,6 @@ describe("timeToSeeds on a random graph", () => {
       }
       if (!changed) break;
     }
-    for (let i = 0; i < n; i++) {
-      if (slow[i] === Infinity) expect(fast[i]).toBe(Infinity);
-      else expect(fast[i]).toBeCloseTo(slow[i]!, 2);
-    }
+    expect(rounded(fast)).toEqual(rounded(slow));
   });
 });
