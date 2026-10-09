@@ -78,9 +78,10 @@ export interface Listing {
   notes: string;
 }
 
+export type Shade = "commute" | "violent" | "property";
+
 export interface Layers {
-  violent: boolean;
-  property: boolean;
+  shade: Shade;
   encampment: boolean;
   danger: boolean;
 }
@@ -144,12 +145,7 @@ export function defaultState(): AppState {
     },
     preferences: defaultPreferences(),
     listings: [],
-    layers: {
-      violent: false,
-      property: false,
-      encampment: false,
-      danger: false,
-    },
+    layers: { shade: "commute", encampment: false, danger: false },
     settings: {
       remember: false,
       language: "en",

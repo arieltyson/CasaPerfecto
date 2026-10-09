@@ -153,8 +153,11 @@ export function parseState(input: unknown): AppState {
           .filter((l): l is Listing => l !== null)
       : [],
     layers: {
-      violent: bool(layers["violent"], false),
-      property: bool(layers["property"], false),
+      shade: oneOf(
+        layers["shade"],
+        ["commute", "violent", "property"],
+        "commute",
+      ),
       encampment: bool(layers["encampment"], false),
       danger: bool(layers["danger"], false),
     },
