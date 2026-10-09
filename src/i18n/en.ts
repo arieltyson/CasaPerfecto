@@ -102,7 +102,8 @@ export const en = {
   "budget.afterUtilities": "After {amount} of utilities",
   "budget.conservative": "At 25%",
   "budget.severe": "At 50%, severe burden",
-  "budget.residual": "Left each month after rent at the 30% line: {amount}",
+  "budget.residual":
+    "After your share of the median rent ({unit}) and utilities, {amount} of gross pay is left each month.",
   "budget.baselines": "Median asking rent, San Francisco",
   "budget.colUnit": "Unit",
   "budget.colMedian": "Median",

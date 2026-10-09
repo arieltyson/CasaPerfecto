@@ -104,7 +104,8 @@ export const es: Record<keyof typeof en, string> = {
   "budget.afterUtilities": "Después de {amount} de servicios",
   "budget.conservative": "Al 25%",
   "budget.severe": "Al 50%, carga severa",
-  "budget.residual": "Lo que queda al mes después de la renta al 30%: {amount}",
+  "budget.residual":
+    "Después de tu parte de la renta mediana ({unit}) y los servicios, te quedan {amount} de sueldo bruto al mes.",
   "budget.baselines": "Renta mediana anunciada, San Francisco",
   "budget.colUnit": "Unidad",
   "budget.colMedian": "Mediana",
