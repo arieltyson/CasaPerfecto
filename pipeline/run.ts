@@ -6,6 +6,8 @@ import { encodeGraph } from "../src/lib/graph.ts";
 import { DATA_OUT, isoDate, log, writeBytes, writeJson } from "./lib.ts";
 import { buildBasemap } from "./basemap.ts";
 import { loadOsm } from "./osm.ts";
+import { buildSafety } from "./safety.ts";
+import { buildTransit } from "./transit.ts";
 import { loadTerrain } from "./terrain.ts";
 import {
   NodeIndex,
@@ -28,11 +30,29 @@ writeBytes(join(DATA_OUT, "graph.bin.gz"), graphBytes);
 log("out", `graph.bin.gz ${(graphBytes.length / 1024).toFixed(0)} KB`);
 
 writeJson(join(DATA_OUT, "places.json"), intersections(network, cells));
+const safety = await buildSafety(cells, refresh);
 writeJson(join(DATA_OUT, "area.json"), {
   asOf: isoDate(),
   grid: cells.grid,
-  cells: { index: cells.index, node: cells.node, snap: cells.snap },
+  hoods: safety.hoods,
+  windows: safety.windows,
+  totals: safety.totals,
+  cells: {
+    index: cells.index,
+    node: cells.node,
+    snap: cells.snap,
+    hood: safety.hood,
+    violent: safety.violent,
+    property: safety.property,
+    encampment: safety.encampment,
+    violentPct: safety.violentPct,
+    propertyPct: safety.propertyPct,
+    encampmentPct: safety.encampmentPct,
+    danger: safety.danger,
+  },
   outline: outline(cells),
 });
+
+writeJson(join(DATA_OUT, "transit.json"), await buildTransit(nodes, refresh));
 
 await buildBasemap(refresh);
