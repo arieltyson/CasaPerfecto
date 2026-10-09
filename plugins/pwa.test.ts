@@ -1,5 +1,5 @@
 import { PALETTES } from "../src/design/tokens.ts";
-import { iconSvg, manifest, serviceWorker } from "./pwa.ts";
+import { headTags, iconSvg, manifest, serviceWorker } from "./pwa.ts";
 
 describe("identity", () => {
   it("uses the accent token as the icon color", () => {
@@ -28,5 +28,14 @@ describe("service worker", () => {
 
   it("only handles requests inside its own scope", () => {
     expect(sw).toContain("request.url.startsWith(scope)");
+  });
+});
+
+describe("favicons", () => {
+  it("declares ICO and PNG icons for browsers without SVG favicons", () => {
+    const icons = headTags()
+      .filter((t) => t.attrs?.["rel"] === "icon")
+      .map((t) => t.attrs?.["href"]);
+    expect(icons).toEqual(["favicon.ico", "icons/favicon-32.png", "icon.svg"]);
   });
 });

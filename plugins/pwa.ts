@@ -4,7 +4,7 @@
 import { createHash } from "node:crypto";
 import { readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import type { Plugin } from "vite";
+import type { HtmlTagDescriptor, Plugin } from "vite";
 import { PALETTES } from "../src/design/tokens.ts";
 
 const PUBLIC = new URL("../public/", import.meta.url).pathname;
@@ -110,42 +110,60 @@ self.addEventListener("fetch", (event) => {
 `;
 }
 
+/** Manifest, icon and theme-color tags added to the page head. */
+export function headTags(): HtmlTagDescriptor[] {
+  return [
+    {
+      tag: "link",
+      attrs: { rel: "manifest", href: "manifest.webmanifest" },
+    },
+    // ICO and PNG for browsers without SVG favicon support (Safari),
+    // then the SVG for browsers that prefer it.
+    {
+      tag: "link",
+      attrs: { rel: "icon", href: "favicon.ico", sizes: "32x32" },
+    },
+    {
+      tag: "link",
+      attrs: {
+        rel: "icon",
+        href: "icons/favicon-32.png",
+        type: "image/png",
+        sizes: "32x32",
+      },
+    },
+    {
+      tag: "link",
+      attrs: { rel: "icon", href: "icon.svg", type: "image/svg+xml" },
+    },
+    {
+      tag: "link",
+      attrs: { rel: "apple-touch-icon", href: "icons/icon-192.png" },
+    },
+    {
+      tag: "meta",
+      attrs: {
+        name: "theme-color",
+        content: PALETTES.light.accent,
+        media: "(prefers-color-scheme: light)",
+      },
+    },
+    {
+      tag: "meta",
+      attrs: {
+        name: "theme-color",
+        content: PALETTES.dark.base,
+        media: "(prefers-color-scheme: dark)",
+      },
+    },
+  ];
+}
+
 export function pwa(): Plugin {
   return {
     name: "casaperfecto:pwa",
     apply: "build",
-    transformIndexHtml() {
-      return [
-        {
-          tag: "link",
-          attrs: { rel: "manifest", href: "manifest.webmanifest" },
-        },
-        {
-          tag: "link",
-          attrs: { rel: "icon", href: "icon.svg", type: "image/svg+xml" },
-        },
-        {
-          tag: "link",
-          attrs: { rel: "apple-touch-icon", href: "icons/icon-192.png" },
-        },
-        {
-          tag: "meta",
-          attrs: {
-            name: "theme-color",
-            content: PALETTES.light.accent,
-            media: "(prefers-color-scheme: light)",
-          },
-        },
-        {
-          tag: "meta",
-          attrs: {
-            name: "theme-color",
-            content: PALETTES.dark.base,
-            media: "(prefers-color-scheme: dark)",
-          },
-        },
-      ];
-    },
+    transformIndexHtml: headTags,
     generateBundle(_options, bundle) {
       this.emitFile({ type: "asset", fileName: "icon.svg", source: iconSvg() });
       this.emitFile({
