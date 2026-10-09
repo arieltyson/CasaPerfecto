@@ -1,5 +1,6 @@
 // Page-side handle to the routing worker, with a small result cache so moving
-// back to a recent workplace or speed is instant.
+// back to a recent workplace or speed is instant. The worker starts on first
+// use and is started again if a request arrives after dispose().
 import type { AreaData } from "../data/area.ts";
 import type { FromWorker, RouteResult, ToWorker } from "../workers/protocol.ts";
 
@@ -12,7 +13,8 @@ export interface Commute {
 const CACHE_SIZE = 8;
 
 export class Router {
-  private worker: Worker;
+  private area: AreaData;
+  private worker: Worker | null = null;
   private nextId = 1;
   private pending = new Map<
     number,
@@ -21,28 +23,32 @@ export class Router {
   private cache = new Map<string, Promise<Commute>>();
 
   constructor(area: AreaData) {
-    this.worker = new Worker(
+    this.area = area;
+  }
+
+  private start(): Worker {
+    if (this.worker) return this.worker;
+    const worker = new Worker(
       new URL("../workers/router.worker.ts", import.meta.url),
       { type: "module" },
     );
-    this.worker.addEventListener(
-      "message",
-      (event: MessageEvent<FromWorker>) => {
-        const reply = event.data;
-        const waiting = this.pending.get(reply.id);
-        if (!waiting) return;
-        this.pending.delete(reply.id);
-        if (reply.type === "result") waiting.resolve(reply);
-        else waiting.reject(new Error(reply.message));
-      },
-    );
-    const message: ToWorker = {
+    worker.addEventListener("message", (event: MessageEvent<FromWorker>) => {
+      const reply = event.data;
+      const waiting = this.pending.get(reply.id);
+      if (!waiting) return;
+      this.pending.delete(reply.id);
+      if (reply.type === "result") waiting.resolve(reply);
+      else waiting.reject(new Error(reply.message));
+    });
+    const init: ToWorker = {
       type: "init",
       dataUrl: new URL(`${import.meta.env.BASE_URL}data/`, location.href).href,
-      cellNodes: area.cells.node,
-      cellSnap: area.cells.snap,
+      cellNodes: this.area.cells.node,
+      cellSnap: this.area.cells.snap,
     };
-    this.worker.postMessage(message);
+    worker.postMessage(init);
+    this.worker = worker;
+    return worker;
   }
 
   route(
@@ -59,6 +65,7 @@ export class Router {
       this.cache.set(key, hit);
       return hit;
     }
+    const worker = this.start();
     const id = this.nextId++;
     const promise = new Promise<RouteResult>((resolve, reject) => {
       this.pending.set(id, { resolve, reject });
@@ -70,7 +77,7 @@ export class Router {
         speed,
         transit,
       };
-      this.worker.postMessage(message);
+      worker.postMessage(message);
     }).then((r): Commute => ({
       walk: r.walk,
       transit: r.transit,
@@ -85,10 +92,12 @@ export class Router {
   }
 
   dispose() {
-    this.worker.terminate();
+    this.worker?.terminate();
+    this.worker = null;
     for (const { reject } of this.pending.values()) {
       reject(new Error("Router disposed."));
     }
     this.pending.clear();
+    this.cache.clear();
   }
 }
