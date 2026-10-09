@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { STALE_AFTER_DAYS, dataAgeDays } from "../data/area.ts";
 import { Button, Panel } from "../design/components.tsx";
 import { useResolvedAppearance } from "../design/hooks.ts";
+import { AreaList } from "../features/areas/AreaList.tsx";
 import { BudgetPanel } from "../features/budget/BudgetPanel.tsx";
 import { CommutePanel } from "../features/commute/CommutePanel.tsx";
 import { MapArea } from "../features/map/MapArea.tsx";
@@ -66,6 +67,7 @@ function Shell() {
         render: () => <CommutePanel />,
       },
       { id: "budget", label: t("tabs.budget"), render: () => <BudgetPanel /> },
+      { id: "areas", label: t("tabs.areas"), render: () => <AreaList /> },
     ],
     [t],
   );
