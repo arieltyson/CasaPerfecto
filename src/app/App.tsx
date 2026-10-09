@@ -12,6 +12,7 @@ import { Methods } from "../features/methods/Methods.tsx";
 import { Onboarding } from "../features/onboarding/Onboarding.tsx";
 import { PreferencesPanel } from "../features/preferences/PreferencesPanel.tsx";
 import { Welcome } from "../features/onboarding/Welcome.tsx";
+import { SettingsPanel } from "../features/settings/SettingsPanel.tsx";
 import { Unlock } from "../features/settings/Unlock.tsx";
 import { I18nProvider, useT } from "../i18n/i18n.tsx";
 import { DataProvider, useData } from "./data.tsx";
@@ -30,8 +31,14 @@ export function App() {
 function Localized() {
   const { state, locked } = useAppState();
   useResolvedAppearance(state.settings.appearance);
+  // While locked, the saved language is encrypted too, so follow the browser.
+  const language = locked
+    ? navigator.language.toLowerCase().startsWith("es")
+      ? "es"
+      : "en"
+    : state.settings.language;
   return (
-    <I18nProvider language={state.settings.language}>
+    <I18nProvider language={language}>
       <UiProvider>{locked ? <Unlock /> : <Main />}</UiProvider>
     </I18nProvider>
   );
@@ -80,6 +87,11 @@ function Shell() {
         render: () => <LedgerPanel />,
       },
       { id: "areas", label: t("tabs.areas"), render: () => <AreaList /> },
+      {
+        id: "settings",
+        label: t("tabs.settings"),
+        render: () => <SettingsPanel />,
+      },
     ],
     [t],
   );
