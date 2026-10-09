@@ -1,5 +1,6 @@
 import { Button, Mark } from "../../design/components.tsx";
 import { useT } from "../../i18n/i18n.tsx";
+import { ACCESSIBILITY_URL, PRIVACY_URL } from "../../data/links.ts";
 
 export function Welcome({
   onStart,
@@ -24,6 +25,15 @@ export function Welcome({
           <li>{t("welcome.promise2")}</li>
           <li>{t("welcome.promise3")}</li>
         </ul>
+        <p className="note">
+          <a href={PRIVACY_URL} target="_blank" rel="noreferrer noopener">
+            {t("links.privacy")}
+          </a>
+          {" · "}
+          <a href={ACCESSIBILITY_URL} target="_blank" rel="noreferrer noopener">
+            {t("links.accessibility")}
+          </a>
+        </p>
         <div className="row">
           <Button variant="primary" onClick={onStart}>
             {t("welcome.start")}

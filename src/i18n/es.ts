@@ -35,6 +35,8 @@ export const es: Record<keyof typeof en, string> = {
   "welcome.promise3": "Sin rastreo.",
   "welcome.start": "Empezar",
   "welcome.methods": "Cómo se calcula",
+  "links.privacy": "Política de privacidad",
+  "links.accessibility": "Declaración de accesibilidad",
 
   "onboarding.label": "Configura tu búsqueda",
   "onboarding.step": "Paso {n} de {total}",

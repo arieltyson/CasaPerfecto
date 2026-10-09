@@ -33,6 +33,8 @@ export const en = {
   "welcome.promise3": "No tracking.",
   "welcome.start": "Start",
   "welcome.methods": "How it's calculated",
+  "links.privacy": "Privacy policy",
+  "links.accessibility": "Accessibility statement",
 
   "onboarding.label": "Set up your search",
   "onboarding.step": "Step {n} of {total}",

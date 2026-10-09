@@ -10,6 +10,11 @@ import {
   Toggle,
 } from "../../design/components.tsx";
 import { useT } from "../../i18n/i18n.tsx";
+import {
+  ACCESSIBILITY_URL,
+  PRIVACY_URL,
+  SOURCE_URL,
+} from "../../data/links.ts";
 import { encodeShare } from "../../lib/share.ts";
 import { RememberToggle } from "../budget/inputs.tsx";
 
@@ -209,12 +214,16 @@ export function SettingsPanel() {
         <output className="note">{status}</output>
         <p className="note">
           {t("settings.about")}{" "}
-          <a
-            href="https://github.com/arieltyson/CasaPerfecto"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
+          <a href={SOURCE_URL} target="_blank" rel="noreferrer noopener">
             GitHub
+          </a>
+          {" · "}
+          <a href={PRIVACY_URL} target="_blank" rel="noreferrer noopener">
+            {t("links.privacy")}
+          </a>
+          {" · "}
+          <a href={ACCESSIBILITY_URL} target="_blank" rel="noreferrer noopener">
+            {t("links.accessibility")}
           </a>
         </p>
       </section>
