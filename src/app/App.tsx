@@ -3,6 +3,8 @@ import { STALE_AFTER_DAYS, dataAgeDays } from "../data/area.ts";
 import { Button, Panel } from "../design/components.tsx";
 import { useResolvedAppearance } from "../design/hooks.ts";
 import { CommutePanel } from "../features/commute/CommutePanel.tsx";
+import { MapArea } from "../features/map/MapArea.tsx";
+import { Rail } from "../features/map/Rail.tsx";
 import { Methods } from "../features/methods/Methods.tsx";
 import { Onboarding } from "../features/onboarding/Onboarding.tsx";
 import { Welcome } from "../features/onboarding/Welcome.tsx";
@@ -70,8 +72,15 @@ function Shell() {
       <a className="skip-link" href="#dock-body">
         {t("skip.main")}
       </a>
-      <div className="map-host" />
-      {state.onboarded ? <Dock tabs={tabs} /> : <Onboarding />}
+      <MapArea />
+      {state.onboarded ? (
+        <>
+          <Dock tabs={tabs} />
+          <Rail />
+        </>
+      ) : (
+        <Onboarding />
+      )}
       <Banners />
       <PickHint />
       <LiveRegion />

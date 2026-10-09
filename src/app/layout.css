@@ -10,6 +10,11 @@
   background: var(--color-base);
 }
 
+.map-canvas {
+  width: 100%;
+  height: 100%;
+}
+
 .map-host .maplibregl-canvas:focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: -3px;
@@ -257,6 +262,9 @@
 }
 
 .legend-labels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 2px;
@@ -316,7 +324,7 @@
 
 .facts {
   display: grid;
-  grid-template-columns: max-content 1fr;
+  grid-template-columns: 1fr auto;
   gap: var(--space-1) var(--space-3);
   margin: 0;
   font-size: var(--type-detail);
@@ -329,6 +337,7 @@
 .facts dd {
   margin: 0;
   font-weight: 600;
+  text-align: right;
 }
 
 .feature-row {
