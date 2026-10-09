@@ -1,0 +1,67 @@
+# Operating System
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE & Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Dependencies (package-lock.json is tracked)
+node_modules/
+.pnpm-store/
+.npm/
+
+# Build Artifacts
+dist/
+build/
+.vite/
+*.tsbuildinfo
+dev-dist/
+
+# Data Pipeline (processed output in public/data and public/basemap is tracked)
+pipeline/.cache/
+pipeline/raw/
+*.osm.pbf
+*.osm
+
+# Security & Secrets
+.env
+.env.*
+!.env.example
+.netrc
+*.pem
+*.key
+*.p12
+service-account*.json
+credentials*.json
+
+# Local Databases & Logs
+*.sqlite
+*.sqlite3
+*.db
+*.log
+npm-debug.log*
+logs/
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+lighthouse-reports/
+.lighthouseci/
+
+# Local Working Notes
+docs/local/

@@ -1,0 +1,6 @@
+dist/
+package-lock.json
+public/data/
+public/basemap/
+playwright-report/
+test-results/
