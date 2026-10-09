@@ -287,6 +287,12 @@
   border-top: 2px dashed var(--color-text-primary);
 }
 
+.swatch-dots {
+  width: 1.6rem;
+  height: 0;
+  border-top: 3px dotted var(--color-alert);
+}
+
 .swatch-dot {
   width: 0.7rem;
   height: 0.7rem;

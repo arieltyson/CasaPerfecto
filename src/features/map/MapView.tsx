@@ -21,6 +21,7 @@ import type { Layers, Point } from "../../app/model.ts";
 import type { FlyTarget } from "../../app/ui.tsx";
 import type { AreaData } from "../../data/area.ts";
 import {
+  MAP_ALERT,
   MAP_FILL_OPACITY,
   MAP_INK,
   MOTION,
@@ -183,6 +184,14 @@ function addOverlays(
       geometry: { type: "MultiLineString", coordinates: props.area.outline },
     },
   });
+  map.addSource("tenderloin", {
+    type: "geojson",
+    data: {
+      type: "Feature",
+      properties: {},
+      geometry: { type: "MultiPolygon", coordinates: props.area.tenderloin },
+    },
+  });
   map.addSource("selected", {
     type: "geojson",
     data: selectedGeoJson(props.area, props.selectedCell),
@@ -317,6 +326,18 @@ function addOverlays(
       "circle-opacity": 0.85,
       "circle-stroke-color": palette.base,
       "circle-stroke-width": 1,
+    },
+  });
+  // Always shown: round caps on a short dash draw a dotted line.
+  map.addLayer({
+    id: "tenderloin-line",
+    type: "line",
+    source: "tenderloin",
+    layout: { "line-cap": "round", "line-join": "round" },
+    paint: {
+      "line-color": MAP_ALERT[flavor],
+      "line-width": 3.5,
+      "line-dasharray": [0.1, 2],
     },
   });
   map.addLayer({

@@ -35,6 +35,9 @@ export interface AreaData {
     danger: number[];
   };
   outline: [number, number][][];
+  /** Official Tenderloin boundary (DataSF Analysis Neighborhoods), as
+   * MultiPolygon coordinates. Outlined on the map at all times. */
+  tenderloin: [number, number][][][];
 }
 
 export interface Place {

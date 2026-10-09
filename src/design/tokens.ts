@@ -94,6 +94,9 @@ export const RAMPS = {
 export const NEUTRAL_DOT = { light: "#4A4540", dark: "#D9D2C8" } as const;
 // Hatching and outlines drawn over the map.
 export const MAP_INK = { light: "#1F1B17", dark: "#F5F0E9" } as const;
+// The permanent Tenderloin boundary. A dotted red line, kept apart from the
+// accent (the workplace dot) by its shape and its legend entry.
+export const MAP_ALERT = { light: "#C3241F", dark: "#FF6F66" } as const;
 
 export const SPACE = [4, 8, 12, 16, 20, 24, 32, 48] as const;
 export const RADIUS = {

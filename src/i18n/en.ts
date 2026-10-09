@@ -192,6 +192,7 @@ export const en = {
   "legend.outside": "Blocks beyond your commute limit are dimmed.",
   "legend.danger": "Danger zone",
   "legend.encampment": "Encampment reports",
+  "legend.tenderloin": "Tenderloin boundary",
 
   "cell.title": "Selected block",
   "cell.near": "In {hood}",

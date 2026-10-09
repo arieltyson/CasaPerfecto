@@ -1,6 +1,7 @@
 import type { Plugin } from "vite";
 import {
   type Palette,
+  MAP_ALERT,
   MIN_TARGET,
   PALETTES,
   PANEL_BLUR_PX,
@@ -33,11 +34,11 @@ export function tokensCss(): string {
   ].join(" ");
   const { light, dark, hcLight, hcDark } = PALETTES;
   return `
-:root { ${scale} ${colors(light)} color-scheme: light; }
+:root { ${scale} ${colors(light)} --color-alert: ${MAP_ALERT.light}; color-scheme: light; }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-appearance="light"]) { ${colors(dark)} color-scheme: dark; }
+  :root:not([data-appearance="light"]) { ${colors(dark)} --color-alert: ${MAP_ALERT.dark}; color-scheme: dark; }
 }
-:root[data-appearance="dark"] { ${colors(dark)} color-scheme: dark; }
+:root[data-appearance="dark"] { ${colors(dark)} --color-alert: ${MAP_ALERT.dark}; color-scheme: dark; }
 @media (prefers-contrast: more) {
   :root { ${colors(hcLight)} }
   :root[data-appearance="dark"] { ${colors(hcDark)} }

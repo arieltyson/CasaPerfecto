@@ -87,3 +87,10 @@ test("the map has a text summary and the Areas tab carries its detail", async ({
   await openTab(page, "Areas");
   await expect(page.getByRole("table")).toContainText("Chinatown");
 });
+
+test("the Tenderloin boundary is always in the legend", async ({ page }) => {
+  await onboard(page);
+  const toggle = page.getByRole("button", { name: "Show map layers" });
+  if (await toggle.isVisible()) await toggle.click();
+  await expect(page.getByText("Tenderloin boundary")).toBeVisible();
+});

@@ -69,3 +69,11 @@ The saved language setting is encrypted with the rest of the data, so the unlock
 ## 17. Rent baselines are updated by hand
 
 Listing sites do not allow scraping. `src/data/rents.ts` is updated monthly from the published medians, and every screen that shows them shows the date.
+
+## 18. Permanent Tenderloin boundary in red (reverses Design D1, "no red for neighborhoods")
+
+At the renter's request, the Tenderloin's official boundary (DataSF Analysis Neighborhoods) is drawn on the map at all times as a red dotted line, with a legend entry. It marks a boundary, not a grade: blocks inside it are shaded by the same measured layers as everywhere else. The red is a separate token (`MAP_ALERT`) with its own contrast test, and its dotted shape keeps it distinct from the workplace dot.
+
+## 19. Share links wait for unlock
+
+A share link opened while saved data is locked is held until the renter unlocks, then merged in. Before this, the link replaced the locked state and the next save overwrote the encrypted data.

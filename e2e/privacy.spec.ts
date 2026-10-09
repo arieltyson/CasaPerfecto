@@ -79,3 +79,45 @@ test("share links leave out salary by default", async ({ page }) => {
   expect(json).not.toContain("120000");
   expect(link).not.toContain("?");
 });
+
+test("a share link opened while locked waits for the passphrase", async ({
+  page,
+}) => {
+  await onboard(page, { salary: "120000", remember: true });
+  await expandSheet(page);
+  await openTab(page, "Settings");
+  await page.getByLabel("Passphrase").fill("correct horse battery");
+  await page.getByRole("button", { name: "Set passphrase" }).click();
+  await expect(
+    page.getByText("Saved data on this device is encrypted."),
+  ).toBeVisible();
+  await page.waitForTimeout(2500);
+
+  const listings = [{ id: "x", address: "Shared listing", baseRent: 3000 }];
+  const payload = Buffer.from(JSON.stringify({ listings }))
+    .toString("base64")
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
+    .replace(/=+$/, "");
+  await page.goto(`./#s=${payload}`);
+  await page.reload();
+
+  // The unlock screen comes first, and the sealed data is untouched.
+  await expect(page.getByLabel("Passphrase")).toBeVisible();
+  const stored = await page.evaluate(() =>
+    localStorage.getItem("casaperfecto:state"),
+  );
+  expect(stored).toContain('"sealed"');
+
+  await page.getByLabel("Passphrase").fill("correct horse battery");
+  await page.getByRole("button", { name: "Unlock" }).click();
+  await expandSheet(page);
+  await openTab(page, "Listings");
+  await expect(page.getByText("Shared listing")).toBeVisible({
+    timeout: 15_000,
+  });
+  await openTab(page, "Budget");
+  await expect(page.getByLabel("Your gross yearly salary")).toHaveValue(
+    "120000",
+  );
+});

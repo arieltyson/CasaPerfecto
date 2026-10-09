@@ -194,6 +194,7 @@ export const es: Record<keyof typeof en, string> = {
   "legend.outside": "Las cuadras fuera de tu límite se ven atenuadas.",
   "legend.danger": "Zona de peligro",
   "legend.encampment": "Reportes de campamentos",
+  "legend.tenderloin": "Límite del Tenderloin",
 
   "cell.title": "Cuadra seleccionada",
   "cell.near": "En {hood}",

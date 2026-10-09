@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { encodeGraph } from "../src/lib/graph.ts";
 import { DATA_OUT, isoDate, log, writeBytes, writeJson } from "./lib.ts";
 import { buildBasemap } from "./basemap.ts";
+import { loadNeighborhood } from "./neighborhoods.ts";
 import { loadOsm } from "./osm.ts";
 import { buildSafety } from "./safety.ts";
 import { buildTransit } from "./transit.ts";
@@ -56,6 +57,7 @@ writeJson(join(DATA_OUT, "area.json"), {
     danger: safety.danger,
   },
   outline: outline(cells),
+  tenderloin: await loadNeighborhood("Tenderloin", refresh),
 });
 
 writeJson(join(DATA_OUT, "transit.json"), await buildTransit(nodes, refresh));

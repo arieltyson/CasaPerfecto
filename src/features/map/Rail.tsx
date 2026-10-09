@@ -127,6 +127,10 @@ function Legend() {
       <p className="note">
         {shade === "commute" ? t("legend.over", { max }) : t("legend.outside")}
       </p>
+      <p className="legend-key">
+        <span className="swatch-dots" aria-hidden="true" />
+        {t("legend.tenderloin")}
+      </p>
       {state.layers.danger ? (
         <p className="legend-key">
           <span className="swatch-dash" aria-hidden="true" />

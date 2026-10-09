@@ -7,6 +7,7 @@ import {
 } from "./color.ts";
 import {
   APPEARANCES,
+  MAP_ALERT,
   MIN_TARGET,
   PALETTES,
   RAMPS,
@@ -99,6 +100,17 @@ describe("ordinal ramps", () => {
   it("use the same steps in reverse for dark maps", () => {
     expect(RAMPS.commuteDark).toEqual(RAMPS.commuteLight.toReversed());
     expect(RAMPS.incidentsDark).toEqual(RAMPS.incidentsLight.toReversed());
+  });
+});
+
+describe("map marks", () => {
+  it("draws the Tenderloin boundary at 3:1 or more against the page base", () => {
+    expect(
+      contrast(MAP_ALERT.light, PALETTES.light.base),
+    ).toBeGreaterThanOrEqual(3);
+    expect(contrast(MAP_ALERT.dark, PALETTES.dark.base)).toBeGreaterThanOrEqual(
+      3,
+    );
   });
 });
 

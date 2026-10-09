@@ -27,6 +27,7 @@ const area: AreaData = {
     danger: [0, 0, 1, 1],
   },
   outline: [],
+  tenderloin: [],
 };
 
 describe("band", () => {

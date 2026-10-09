@@ -40,16 +40,21 @@ interface StateValue {
 
 const StateContext = createContext<StateValue | null>(null);
 
+function clearHash() {
+  history.replaceState(null, "", location.pathname + location.search);
+}
+
 function boot(): { state: AppState; locked: Sealed | null } {
   const loaded = load();
-  let state = loaded.status === "ready" ? loaded.state : defaultState();
-  const locked = loaded.status === "locked" ? loaded.sealed : null;
-  const shared = decodeShare(location.hash, state);
-  if (shared) {
-    state = shared;
-    history.replaceState(null, "", location.pathname + location.search);
+  if (loaded.status === "locked") {
+    // A share link opened while saved data is locked is applied after
+    // unlocking, so it can never replace the encrypted data unseen.
+    return { state: defaultState(), locked: loaded.sealed };
   }
-  return { state, locked: shared ? null : locked };
+  const state = loaded.status === "ready" ? loaded.state : defaultState();
+  const shared = decodeShare(location.hash, state);
+  if (shared) clearHash();
+  return { state: shared ?? state, locked: null };
 }
 
 export function StateProvider({ children }: { children: ReactNode }) {
@@ -88,7 +93,9 @@ export function StateProvider({ children }: { children: ReactNode }) {
       const key = await deriveKey(passphrase, salt);
       try {
         const restored = await unlock(key, locked);
-        dispatch({ type: "replace", state: restored });
+        const shared = decodeShare(location.hash, restored);
+        if (shared) clearHash();
+        dispatch({ type: "replace", state: shared ?? restored });
         setLock({ key, salt });
         setLocked(null);
         return true;
