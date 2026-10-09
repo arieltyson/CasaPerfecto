@@ -34,21 +34,21 @@ export function MapArea() {
   const [failed, setFailed] = useState(false);
 
   const padding = usePanelPadding(state.onboarded);
-  const { area, commute, minutesAt } = data;
+  const { area, commute, walkAt } = data;
   const markers = useMemo(() => {
     if (!area) return [];
     const ranked = rankListings(
       state.listings,
       state.profile,
       state.preferences,
-      (l) => (l.location ? minutesAt(cellOfPoint(area, l.location)) : null),
+      (l) => (l.location ? walkAt(cellOfPoint(area, l.location)) : null),
     );
     return ranked.flatMap((r, i) =>
       r.listing.location
         ? [{ ...r.listing.location, label: String(i + 1) }]
         : [],
     );
-  }, [area, state.listings, state.profile, state.preferences, minutesAt]);
+  }, [area, state.listings, state.profile, state.preferences, walkAt]);
 
   if (!supported || failed) {
     return (

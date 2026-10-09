@@ -251,6 +251,7 @@ export const en = {
   "listings.outside": "Outside the area",
   "listings.confirmRemove": "Remove {address}?",
   "listings.untitled": "Untitled listing",
+  "listings.showOnMap": "Show on the map",
 
   "form.titleNew": "New listing",
   "form.titleEdit": "Edit listing",
@@ -260,6 +261,7 @@ export const en = {
   "form.locationSet": "Set on the map",
   "form.locationNone": "Not set",
   "form.pick": "Pick on the map",
+  "form.intersection": "Nearest intersection",
   "form.baseRent": "Base rent per month",
   "form.utilities": "Utilities per month",
   "form.parking": "Parking per month",

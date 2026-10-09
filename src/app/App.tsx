@@ -7,6 +7,7 @@ import { BudgetPanel } from "../features/budget/BudgetPanel.tsx";
 import { CommutePanel } from "../features/commute/CommutePanel.tsx";
 import { MapArea } from "../features/map/MapArea.tsx";
 import { Rail } from "../features/map/Rail.tsx";
+import { LedgerPanel } from "../features/ledger/LedgerPanel.tsx";
 import { Methods } from "../features/methods/Methods.tsx";
 import { Onboarding } from "../features/onboarding/Onboarding.tsx";
 import { PreferencesPanel } from "../features/preferences/PreferencesPanel.tsx";
@@ -72,6 +73,11 @@ function Shell() {
         id: "preferences",
         label: t("tabs.preferences"),
         render: () => <PreferencesPanel />,
+      },
+      {
+        id: "listings",
+        label: t("tabs.listings"),
+        render: () => <LedgerPanel />,
       },
       { id: "areas", label: t("tabs.areas"), render: () => <AreaList /> },
     ],

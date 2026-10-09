@@ -254,6 +254,7 @@ export const es: Record<keyof typeof en, string> = {
   "listings.outside": "Fuera de la zona",
   "listings.confirmRemove": "¿Quitar {address}?",
   "listings.untitled": "Anuncio sin nombre",
+  "listings.showOnMap": "Mostrar en el mapa",
 
   "form.titleNew": "Nuevo anuncio",
   "form.titleEdit": "Editar anuncio",
@@ -263,6 +264,7 @@ export const es: Record<keyof typeof en, string> = {
   "form.locationSet": "Marcada en el mapa",
   "form.locationNone": "Sin marcar",
   "form.pick": "Elegir en el mapa",
+  "form.intersection": "Cruce más cercano",
   "form.baseRent": "Renta base al mes",
   "form.utilities": "Servicios al mes",
   "form.parking": "Estacionamiento al mes",
